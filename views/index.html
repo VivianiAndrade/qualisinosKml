@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>QualiSinos</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/static/css/modern-business.css" rel="stylesheet">
+
+
+    <!-- Custom Fonts -->
+    <link href="/static/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/demo.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/component1.css" />
+
+    <script src="/static/js/modernizr-2.6.2.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- Google Maps -->
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        body{
+            background: url('/static/img/9.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;         
+ 
+        }
+        div.inner {
+			box-shadow: 0px 0px 1em #666;
+			-webkit-box-shadow: 0px 0px 1em #666;
+			-moz-box-shadow: 0px 0px 1em #666;
+			border: 5px #FFF solid;
+            }
+            *{
+  margin: 0;
+  padding: 0;
+  font-family: 'Lato', sans-serif;
+}
+.menu{
+  width: 770px;
+  height: 66px;
+  margin: 5px auto;
+  position: relative;
+}
+.menu ul{
+  list-style: none;
+}
+.menu li{
+  float: left;
+}
+.menu li a{
+  display: block;
+  padding: 10px 0;
+  font-size: 16px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #000;
+  /*border-bottom: 2px solid rgb(46,164,216);*/
+  margin: 30px 10px 0 0;
+  width:100px;
+}
+/* Add space between the third and fourth "li" to add the logo */
+.menu li:nth-child(3){
+  margin-right: 120px;
+}
+/* Remove the last margin-right */
+.menu li:nth-child(6) a{
+  margin-right: 0;
+}
+.menu li:nth-child(1n+4) a{
+  text-align: right;
+}
+.logo{
+  width: 130px;
+  height: 130px;
+  background-image: url('/static/img/Capturar3.png');
+  background-repeat: no-repeat;
+  background-size: 100px 90px;
+  background-position: center;
+  position: absolute;
+  left: 0px;
+  border: solid 2px rgb(46,164,216);
+  border-radius:100%;
+  background-color: #FFF;
+    
+}
+
+.site{
+  text-align: center;
+}
+
+.circle {
+  border: solid 2px rgb(46,164,216);
+  background-color: #fff;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  overflow: hidden;
+  position:fixed;
+  top: 5%;
+  right: 5%;
+  box-shadow: 0px 0px 1em rgb(46,164,216);
+			-webkit-box-shadow: 0px 0px 1em rgb(46,164,216);
+			-moz-box-shadow: 0px 0px 1em rgb(46,164,216);
+			border: 5px #FFF solid;
+}
+
+.circle img {
+  position: center;
+  bottom: 0%;
+  top: 15%;
+  width: 80%;
+}
+
+.quadrado {
+  border: solid 2px rgb(46,164,216);
+  background-color: #fff;
+  width: 80px;
+  height: 80px;
+  overflow: hidden;
+  position:fixed;
+  bottom: 9%;
+  right: 5%;
+}
+
+.quadrado img {
+  position: center;
+  bottom: 0%;
+  top: 15%;
+  width: 80%;
+}
+
+.img_button{
+    width: 20%;
+    height: 20%; 
+}
+    </style>
+    <script>
+       
+        function initMap() {
+
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 11,
+                mapTypeId: 'satellite',
+
+            });
+
+            var ctaLayer = new google.maps.KmlLayer({               
+                url: 'https://vivianiandrade.github.io/qualisinos.github.io/kmz/limite_mun_bacia_amarelo.kml',
+                map: map,
+            });      
+
+                getPoints();
+                function getPoints() {
+                    axios.get('/analise/mapa')
+                        .then((response) => {  
+                            console.log(response);         
+                    response.data.forEach(element => {
+                        var latLng = new google.maps.LatLng(element.lat,element.lng);
+                        var marker = new google.maps.Marker({
+                        position: latLng,
+                        map: map,
+                        icon: element.imagem
+                    }); 
+                    var data = new Date(element.dataColeta);
+
+                    var infowindow = new google.maps.InfoWindow;
+                    var contentString = `<div id="content">` +
+                        `<div id="siteNotice">` +
+                        `</div>` +
+                        `<div id="bodyContent">` +
+                        `<br><table>` +
+                        `<tr>` +
+                        `<th colspan=2 style="height:20px;" align="center">${element.nomeOperador}</th>` +
+                        `</tr>` +
+                        `<tr>` +
+                        `<th style="height:20px;">${element.nome}</th>` +
+                        `</tr>` +
+                        `<tr style="background-color:#99ccff">`+
+                        `<td style="height:20px;"><b>Data da Coleta<b></td>` +
+                        `<td align="center">${data.toLocaleDateString()}</td>` +
+                        `</tr>` +
+                        `<tr>`+
+                        `<td style="height:20px;"><b>Hora<b></td>` +
+                        `<td align="center">${element.hora}</td>` +
+                        `</tr>` +
+                        `<tr style="background-color:#99ccff">` +
+                        `<td style="height:20px;"><b>pH<b></td>` +
+                        `<td align="center">${element.parPh}</td>` +
+                        `</tr>` +
+                        `<tr >` +
+                        `<td style="height:20px;"><b>Condutividade<b></td>` +
+                        `<td align="center">${element.parCond} &micro;/cm</td>` +
+                        `</tr>` +
+                        `<tr style="background-color:#99ccff">` +
+                        `<td style="height:20px;"><b>Turbidez<b></td>` +
+                        `<td align="center">${element.parTurb} NTU</td>` +
+                        `</tr>` +
+                        `<tr >` +
+                        `<td style="height:20px;"><b>Temperatura da água<b></td>` +
+                        `<td align="center">${element.parTemp}ºC</td>` +
+                        `</tr>` +
+                        `<tr style="background-color:#99ccff">` +
+                        `<td style="height:20px;"><b>Oxigênio dissolvido<b></td>` +
+                        `<td align="center">${element.parOD} mg/L</td>` +
+                        `</tr>` +
+                        `<tr>` +
+                        `<td style="height:20px;"><b>Nível do Rio<b></td>` +
+                        `<td align="center">${element.parNivelRio} m</td>` +
+                        `</tr>` +
+                        `</table>` +
+                        `</div>` +
+                        `</div>`;
+                    infowindow.setContent(contentString);
+                    marker.addListener('click', function () {
+                        infowindow.open(map, marker);
+                        });        
+                    });
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+                }
+
+        }
+       
+    </script>
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-7243260-2']);
+        _gaq.push(['_trackPageview']);
+        (function () {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+    <style>
+        body {font-family: Arial, Helvetica, sans-serif;}
+        * {box-sizing: border-box;}
+        
+        /* Button used to open the contact form - fixed at the bottom of the page */
+      
+        
+        /* The popup form - hidden by default */
+        .form-popup {
+          display: none;
+          position: fixed;
+          top: 18%;
+          right: 2%;
+          z-index: 9;
+          box-shadow: 0px 0px 1em #666;
+			-webkit-box-shadow: 0px 0px 1em #666;
+			-moz-box-shadow: 0px 0px 1em #666;
+        }
+        .form-popupContato {
+          display: none;
+          position: fixed;
+          bottom: 10px;
+          right: 2%;
+          border: 3px solid #f1f1f1;
+          z-index: 9;
+        }
+        /* Add styles to the form container */
+        .form-container {
+          max-width: 300px;
+          padding: 10px;
+          background-color:rgb(219,237,255);
+          box-shadow: 0px 0px 1em #666;
+			-webkit-box-shadow: 0px 0px 1em #666;
+			-moz-box-shadow: 0px 0px 1em #666;
+			
+			
+        }
+        .form-containerContato {
+          max-width: 320px;
+          padding: 15px;
+          background-color:rgb(219,237,255);
+          
+        }
+        .titulo{
+           text-align: center;
+            font-size:1.5em;
+            margin-top: 10%;
+            margin-bottom: 5%;            
+            font-weight: bold;
+        }
+        
+        .titulo_button{
+            text-align: center;
+            font-size:1.0em;
+            margin-top: 10%;
+            margin-bottom: 5%;            
+            font-weight: bold;
+            color: #fff;
+        }
+        /* Full-width input fields */
+        .form-container input[type=text], .form-container input[type=password] {
+          width: 100%;
+          padding: 15px;
+          margin: 5px 0 22px 0;
+          border: none;
+          background: #f1f1f1;
+        }
+        
+        /* When the inputs get focus, do something */
+        .form-container input[type=text]:focus, .form-container input[type=password]:focus {
+          background-color: #ddd;
+          outline: none;
+        }
+        
+        /* Set a style for the submit/login button */
+        .form-container .btn {
+          background-color: rgb(46,164,216);
+          border: none;
+          cursor: pointer;
+          width: 100%;
+          margin-bottom:5px;
+          opacity: 0.8;
+          padding-left: 0%;
+          padding-top: 5%;
+        }
+        
+        /* Add a red background color to the cancel button */
+        .form-container .cancel {
+            
+        }
+        .disc {
+	        list-style-type: disc;
+	    }
+        /* Add some hover effects to buttons */
+        .form-container .btn:hover, .open-button:hover {
+          opacity: 1;
+        }
+        </style>
+    <style>
+
+        .box {
+                  width: 40%;
+                  margin: 0 auto;
+                  background: rgba(255,255,255,0.2);
+                  padding: 35px;
+                  border: 2px solid #fff;
+                  border-radius: 20px/50px;
+                  background-clip: padding-box;
+                  text-align: center;
+                }
+                
+                .overlay {
+                  position: fixed;
+                  top: 0;
+                  bottom: 0;
+                  left: 0;
+                  right: 0;
+                  background: rgba(0, 0, 0, 0.7);
+                  transition: opacity 500ms;
+                  visibility: hidden;
+                  opacity: 0;
+                }
+                .overlay:target {
+                  visibility: visible;
+                  opacity: 1;
+                }
+                
+                .popup {
+                  margin: 70px auto;
+                  padding: 20px;
+                  background: #fff;
+                  border-radius: 5px;
+                  width: 20%;
+                  position: relative;
+                  transition: all 5s ease-in-out;
+                }
+                
+                .popup h2 {
+                  margin-top: 0;
+                  color: #333;
+                  font-family: Tahoma, Arial, sans-serif;
+                }
+                .popup .close {
+                  position: absolute;
+                  top: 20px;
+                  right: 30px;
+                  transition: all 200ms;
+                  font-size: 30px;
+                  font-weight: bold;
+                  text-decoration: none;
+                  color: #333;
+                }
+                .popup .close:hover {
+                  color: #06D85F;
+                }
+                .popup .content {
+                  max-height: 30%;
+                  overflow: auto;
+                }
+                
+                @media screen and (max-width: 700px){
+                  .box{
+                    width: 70%;
+                  }
+                  .popup{
+                    width: 70%;
+                  }
+                }
+                .navbar-inverse{
+                 /*   background-color: rgb(115, 194, 231);*/
+                   /* background-color: #FFF;*/
+                    border: #ddd;
+                }
+                .hm div {
+  width:8em;
+  color:#fff;
+  background:#999;
+  border-radius:5px;
+  padding:5px;
+}
+.font_cor{
+    color: rgb(1, 19, 10);
+    font-size: 1.1em;
+    text-align: justify;
+    font-style:oblique;
+    font-weight: bold;
+    text-shadow: 0.1em 0.1em 0.2em white;
+   
+}
+                </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="form-popup" id="myForm">
+            <div>
+                <img style="position:relative; left:1px; top:1px; z-index: 1;width:250px; height:100px;" src="/static/img/fabricacao-placas.jpg" />
+                <img style="position:absolute; left:60px; top:30px; z-index: 2; width: 50%;border:3px solid #fff;" src="/static/img/Maos_agua.jpg" />
+
+            </div>
+            <form class="form-container">
+                <div class="titulo">Qualidade da Água<br>
+                    Rio dos Sinos</div>
+                <ul class="disc">
+                    <li><label for="psw"><b>ph:</b></label> 6,76</li>
+                    <li><label for="psw"><b>Condutividade:</b></label> 3</li>
+                    <li><label for="psw"><b>Turbidez:</b></label> 2,5</li>
+                    <li><label for="psw"><b>Temperatura da água:</b></label> 16</li>
+                    <li><label for="psw"><b>Oxigênio Dissolvido:</b></label> 3</li>
+                    <li><label for="psw"><b>Nível do Rio:</b></label> 3m</li>
+                </ul>
+                <button type="button" class="btn cancel" onclick="closeForm()">
+                    <span class="titulo_button"> Fechar</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Page Heading/Breadcrumbs -->
+
+        <!-- /.row -->
+
+        <!-- Image Header -->
+        <div class="row">
+            <div class="col-sm-12">
+
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-sm-3">
+                <img class="img-responsive" src="/static/img/Capturar3.PNG" alt="">
+                <br><br><br><br><br><br><br>
+                <p class="font_cor" >Este site foi criado para facilitar o acesso às informações da Bacia Hidrográfica
+                        do Rio dos Sinos - RS e propor um sistema de acompanhamento integrado dos
+                        dados da qualidade de água do Sinos, por meio da atualização das informações
+                        geradas pelo monitoramento executado pela FEPAM e pelas companhias de
+                        saneamento. Através da apresentação dos resultados à sociedade de maneira
+                        simples, esta plataforma busca facilitar a visualização e o entendimento do
+                        comportamento da qualidade de água no Rio dos Sinos.</p>
+    
+            </div>
+            <div class="col-md-9">
+                <div id='map' style='width:1400px; height:680px;' class="img-responsive inner"></div>
+                <script async defer id='map' style='width:1400px; height:680px;' src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBeBvuniQgKER93lRHoAnt8HxH5PBhh6cA&language=br&region=BR&libraries=visualization&callback=initMap"></script>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Service Panels -->
+        <!-- The circle icons use Font Awesome's stacked icon classes. For more information, visit http://fontawesome.io/examples/ -->
+
+        <div class="row">
+
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header">
+                </h2>
+
+                <div class="col-md-6">
+                    <img class="img-responsive" src="/static/img/mapa_sinos.jpg" alt="">
+                </div>
+                <div class="col-md-6">
+                    <h2>
+                        <small><img src="/static/img/logo_quali_desenho.PNG" style='width:40px; height:35px;' alt=""></small>
+                        Bacia Hidrográfica do Rio dos Sinos</h2>
+                    <div class="col-md-6">
+
+                        <p style="text-align: justify;">Historicamente a denominação do Rio dos Sinos sofreu algumas alterações, os
+                            povos indígenas (Charruas e Minuanos) chamavam-no de Cururuaí, fazendo
+                            referência aos ratões habitantes dos banhados da bacia. Outro nome encontrado é
+                            Itapuí, que pode significar “rio das pedras delgadas”, ou “rio das pedras que
+                            gritam”. O nome utilizado atualmente pode ter derivado da palavra Sinus, que
+                            em latim significa seio, enseada ou sinuoso (SILVA, 2010). Até a década de 30
+                            ou 40, o rio apresentava boas condições de balneabilidade e até mesmo de
+                            potabilidade, que posteriormente foram se deteriorando em virtude do
+                            crescimento populacional e da instalação de indústrias que lançavam seus
+                            rejeitos e esgotos no rio ou em banhados adjacentes (BECKER, 1995).</p>
+
+                    </div>
+                    <div class="col-md-6">
+                        <p style="text-align: justify;">Esse importante recurso hídrico é a fonte de abastecimento de água para cerca de
+                            1.300.000 habitantes, com uma densidade populacional de cerca de 360 pessoas
+                            por quilômetro quadrado. As áreas urbanas mais densamente povoadas, de
+                            acordo com estimativa populacional para o ano de 2017 (IBGE, 2018) incluem
+                            as cidades de Novo Hamburgo com 249.508 habitantes, Canoas com 343.853
+                            habitantes e São Leopoldo com 230.914 habitantes, que estão localizadas na
+                            porção baixa da bacia. </p>
+                        <p style="text-align: justify;">A região possui uma produção muito diversificada:
+                            calçados e couro, metais-mecânicos, alimentos, petroquímica, madeira e
+                            mobiliário, turismo e hospitalidade (BLUME et al., 2010).</p>
+                    </div>
+                    <br>
+                </div>
+            </div>
+            <!-- Content Row -->
+
+            <div class="col-lg-12">
+                <div class="panel-group" id="accordion">
+                    <div class="col-lg-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                        Região do Alto Sinos</a>
+                                </h4>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse">
+                                <div class="panel-body" style="text-align: justify;">
+                                    Região de rochas basálticas de diferentes constituições. Predominam
+                                    as formas de platôs da Serra, encostas abruptas e inúmeras quedas d’água. A
+                                    cobertura vegetal é exuberante, com vestígios de mata atlântica, mata de
+                                    araucárias e de turfeiras. Próximo às nascentes encontram-se as culturas dos
+                                    povos guarani e alguns núcleos de colonização alemã, mas na região
+                                    predominam descendentes de imigração italiana. A vocação econômica é
+                                    principalmente agropecuária, com cultivo de fumo, milho e hortaliças. Quanto
+                                    aos impactos ambientais, se observam desmatamentos e poluição desencadeados
+                                    (contaminação dos cursos d’água e deposição de resíduos sólidos). Municípios:
+                                    Canela, Caraá, Dois Irmãos, Santa Maria do Herval, Santo Antônio da Patrulha e
+                                    São Francisco de Paula.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <!-- /.panel -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                        Região do Médio Sinos</a>
+                                </h4>
+                            </div>
+                            <div id="collapseTwo" class="panel-collapse collapse">
+                                <div class="panel-body" style="text-align: justify;">
+                                    área de região de rochas sedimentares (arenitos e depósitos de
+                                    sedimentos nas margens dos rios e arroios). Predominam matas, campos de
+                                    pastagens e arrozais. A população é de origem alemã e polonesa, dedicam-se
+                                    principalmente às atividades de agropecuária (lavouras de arroz e pastagens)
+                                    além da indústria coureiro-calçadista. Nesta área os impactos ambientais se
+                                    acentuam, há muito desmatamentos, desvio dos cursos d’água para irrigação,
+                                    retirada de areia do leito principal, poluição industrial e doméstica. Municípios:
+                                    Araricá, Campo Bom, Capela de Santana, Estância Velha, Gravataí, Igrejinha,
+                                    Ivoti, Nova Hartz, Osório, Parobé, Portão, Riozinho, Rolante, São Sebastião do
+                                    Caí, Sapiranga, Taquara, Três Coroas.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <!-- /.panel -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                                        Região do Baixo Sinos</a>
+                                </h4>
+                            </div>
+                            <div id="collapseThree" class="panel-collapse collapse">
+                                <div class="panel-body" style="text-align: justify;">
+                                    É caracterizada principalmente pela extensa planície de inundação
+                                    do rio. As formações rochosas são sedimentares, dominando depósitos argilosos,
+                                    frequentemente encharcados. A vegetação é típica de banhados, com campos
+                                    úmidos junto ao vale e presença de matas ciliares. Deságuam no leito dos Sinos
+                                    os arroios Sapiranga, Campo Bom, Luís Rau, Pampa, Gauchinho, Portão,
+                                    Cerquinha, Boa vista, Estância, Kruze, Peão e João Corrêa. A região foi
+                                    colonizada principalmente por descendentes de alemães e de diversas outras
+                                    culturas devido ao avanço do processo de industrialização dos ramos coureiro-
+                                    calçadista, metalúrgico, tecnológico e ensino universitário, além da crescente
+                                    ocupação urbana provinda dos municípios da grande Porto Alegre. Os impactos
+                                    ambientais na região se dão principalmente pela ocupação e aterramento das
+                                    áreas de banhado, desmatamento da vegetação ciliar, intensa poluição do solo e
+                                    contaminação água por esgotos domésticos e efluentes diversos, além de
+                                    deposição de resíduos sólidos em áreas inadequadas e extração de areia e pedra
+                                    grês dos morros areníticos. Municípios: Cachoeirinha, Canoas, Esteio, Glorinha,
+                                    Nova Santa Rita, Novo Hamburgo, Sapucaia do Sul e São Leopoldo.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.panel-group -->
+
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+        </div>
+
+        <div class="row" id="qualidade">
+            <div class="col-lg-12">
+                <h2 class="page-header">
+                    <small><img src="/static/img/logo_quali_desenho.PNG" style='width:40px; height:35px;' alt=""></small>
+                    Qualidade da água</h2>
+                <div class="col-md-4">
+
+                    <p style="text-align: justify;">A qualidade da água pode ser definida como a variação de um conjunto de
+                        parâmetros intrínsecos que limita seu uso, pode ser extremamente variável, tanto
+                        em tempo quanto em espaço e requer monitoramentos de rotina para que possa
+                        ser detectado seu padrão de variação espacial e suas alterações ao longo do
+                        tempo (MATHIESSEN, et al, 2014).
+                        Segundo a Política Nacional dos Recursos Hídricos, Lei 9433/97, deve-se
+                        “assegurar a atual e às futuras gerações a necessária disponibilidade de água, em
+                        padrões de qualidade adequados aos respectivos usos” (BRASIL, 1997).
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <p style="text-align: justify;">Nesse
+                        sentido, a Resolução nº 357 de 2005 do CONAMA, dispõe sobre a classificação
+                        dos corpos de água e diretrizes ambientais para o seu enquadramento, bem como
+                        estabelece condições e padrões de lançamento de efluentes, e dá outras
+                        providências (BRASIL, 2005). Os usos preponderantes previstos nas classes de
+                        enquadramento são: abastecimento para consumo humano; preservação do
+                        equilíbrio natural das comunidades aquáticas; preservação dos ambientes
+                        aquáticos em Unidades de Conservação (UCs) de proteção integral; preservação
+                        das comunidades aquáticas, inclusive em terras indígenas; recreação de contato
+                        primário ou secundário; irrigação; aquicultura e pesca; dessedentação de
+                        animais; navegação; harmonia paisagística (BRASIL, 2005).</p>
+                </div>
+                <div class="col-md-4">
+                    <p style="text-align: justify;">Mesmo diante de todo o arcabouço legal, a qualidade das águas no Brasil vem
+                        piorando devido ao aumento da população e à ausência de políticas públicas
+                        voltadas para a sua preservação. Essa situação reflete o fato de que o
+                        comprometimento da qualidade da água é decorrente da poluição causada por
+                        diferentes fontes, tais como, efluentes domésticos, por exemplo, constituídos por
+                        contaminantes orgânicos, nutrientes e microrganismos, muitas vezes patogênicos
+                        (MERTEN; MINELLA, 2002). No Rio Grande do Sul, um exemplo disso é o
+                        Rio dos Sinos, situado na região metropolitana, e que tem registros frequentes de
+                        mortandade de peixes nos trechos onde ocorrem lançamentos de efluentes
+                        industriais (FEPAM, 2007).</p>
+                </div>
+
+
+
+            </div>
+        </div>
+
+        <!-- Service Tabs -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header">
+                    <small><img src="/static/img/logo_quali_desenho.PNG" style='width:40px; height:35px;' alt=""></small>
+                    Parâmetros da qualidade da água</h2>
+                <div class="col-md-4">
+                    <p style="text-align: justify;">As características físicas, químicas e biológicas das águas naturais traduzem
+                        uma série de processos que ocorrem no corpo hídrico e na bacia hidrográfica,
+                        como consequência da capacidade de dissolução de uma ampla gama de
+                        elementos e da capacidade de transportar substâncias pelo escoamento
+                        superficial e subterrâneo (LIBÂNIO, 2010).
+                        Os parâmetros físicos retratam as características relacionadas, principalmente
+                        com o aspecto estético da água. Incluem nestas características: a temperatura,
+                        cor, condutividade elétrica, turbidez, sólidos totais, odor e sabor sendo que a
+                        maioria das variáveis está normalmente associada à presença de sólidos nos
+                        corpos d’água (OLIVEIRA, 2013).</p>
+                </div>
+                <div class="col-md-4">
+                    <p style="text-align: justify;"> Os parâmetros químicos refletem as
+                        características referentes à presença de compostos químicos (orgânicos e
+                        inorgânicos) que influenciam a qualidade de água. Incluem nestas
+                        características: pH, alcalinidade, acidez, dureza, salinidade, oxigênio dissolvido,
+                        demanda bioquímica de oxigênio, demanda química de oxigênio, carbon
+                        oorgânico total, compostos orgânicos, nitrogênio, fósforo e metais pesados
+                        (OLIVEIRA, 2013). Já os parâmetros biológicos referem-se aos diversos
+                        microrganismos presentes no ecossistema aquático e devem ser monitorados,
+                        pois refletem a transformação da matéria orgânica, na fixação de nutrientes e na
+                        depuração dos ambientes aquáticos, além de serem capazes de transmitir
+                        diversas doenças de veiculação hídrica (DANIEL et al., 2001).</p>
+                </div>
+                <div class="col-md-4">
+                    <p style="text-align: justify;">Ficou definido que serão apresentados, para simplificar o acompanhamento da
+                        qualidade de água do Sinos, os resultados de cinco parâmetros básicos:
+                        temperatura, turbidez, condutividade elétrica, pH e oxigênio dissolvido.</p>
+                </div>
+
+            </div>
+            <div class="col-lg-12">
+                <ul id="myTab" class="nav nav-tabs nav-justified">
+                    <li class="active"><a href="#service-one" data-toggle="tab">
+                            <i class="fa fa-thermometer"></i> Temperatura</a>
+                    </li>
+                    <li class=""><a href="#service-two" data-toggle="tab">
+                            <i class="fa fa-flask"></i> Turbidez</a>
+                    </li>
+                    <li class=""><a href="#service-three" data-toggle="tab">
+                            <i class="fa fa-bolt"></i> Condutividade elétrica</a>
+                    </li>
+                    <li class=""><a href="#service-four" data-toggle="tab">
+                            <i class="fa fa-tachometer"></i> pH</a>
+                    </li>
+                    <li class=""><a href="#service-five" data-toggle="tab">
+                            <i class="fa fa-tint"></i> Oxigênio Dissolvido</a>
+                    </li>
+                </ul>
+
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade active in" id="service-one">
+                        <h4></h4>
+                        <p style="text-align: justify;">A temperatura da água, em geral, indica a magnitude da energia cinética do
+                            movimento aleatório das moléculas e sintetiza o fenômeno de transferência de
+                            calor à massa líquida (LIBÂNIO, 2010). A temperatura exerce um efeito sobre
+                            as reações químicas e a atividade biológica na água, sendo que a velocidade das
+                            reações duplica a cada acréscimo de 10ºC na temperatura da água
+                            (COLLISCHONN E DORNELLES, 2015).</p>
+                        <p style="text-align: justify;">A alteração da temperatura das águas naturais decorre em especial da insolação,
+                            está influenciada significativamente pelo clima e latitude, e pelo lançamento de
+                            despejos industriais (LIBÂNIO, 2010). A temperatura também determina a
+                            concentração máxima de oxigênio dissolvido na água, ou seja, a concentração de
+                            saturação, pelas trocas entre a superfície da água e a atmosfera
+                            (COLLISCHONN E DORNELLES, 2015).</p>
+                    </div>
+                    <div class="tab-pane fade" id="service-two">
+                        <h4></h4>
+                        <p style="text-align: justify;">Esse parâmetro se refere à medição de partículas em suspensão presentes na
+                            água, como: argila, silte, plâncton, microrganismos, matéria orgânica e
+                            inorgânica particuladas (LIBÂNIO, 2010). A medição da turbidez é obtida pela
+                            passagem de um feixe de luz através da amostra que pode inferir a concentração
+                            de partículas suspensas na água.</p>
+                        <p style="text-align: justify;"> Sendo este, um importante parâmetro de
+                            monitoramento em vista da simplicidade, rapidez e baixo valor de custo de
+                            medição. Grande parte das águas de rios brasileiros é naturalmente turva em
+                            decorrência das características geológicas das bacias de drenagem, dos índices
+                            pluviométricos e do uso de práticas agrícolas. Turbidez em altas taxas podem
+                            reduzir o processo de fotossíntese da vegetação submersa e das algas,
+                            diminuindo a produção de oxigênio dissolvido (VON SPERLING, 2005).</p>
+                    </div>
+                    <div class="tab-pane fade" id="service-three">
+                        <h4></h4>
+                        <p style="text-align: justify;">A medição deste parâmetro está relacionada à quantidade de íons dissolvidos na
+                            água, quando determinada pode-se obter uma estimativa rápida da concentração
+                            de íons em uma amostra. A condutividade elétrica é uma medida da capacidade
+                            de uma solução aquosa conduzir uma corrente elétrica devido à presença de
+                            íons. Indicando assim, a quantidade de sais existentes na coluna d’água e,
+                            portanto, representa uma medida indireta da concentração de poluentes
+                            (MORTARI; SILVA, 2009).</p>
+                        <p style="text-align: justify;"> A condutividade elétrica da água é normalmente
+                            expressa em S/cm (microsiemens por centímetro). Águas naturais geralmente
+                            apresentam valores de condutividade elétrica inferiores à 100 S/cm, podendo
+                            atingir 1000 S/cm em corpos d’água receptores de cargas altas de efluentes
+                            domésticos e industriais (LIBÂNIO, 2010).</p>
+                    </div>
+                    <div class="tab-pane fade" id="service-four">
+                        <h4></h4>
+                        <p style="text-align: justify;">O pH representa a concentração de íons de hidrogênio, em uma relação de
+                            equilíbrio entre íons (H+) e (OH-) dando a indicação de acidez, neutralidade ou
+                            alcalinidade de um determinado recurso hídrico. O pH interfere no grau de
+                            solubilidade de diversas substâncias, e na intensidade da cor e distribuição dos
+                            compostos químicos, influenciando assim o potencial tóxico de diversos
+                            elementos presentes o corpo hídrico (LIBÂNIO, 2010). A escala de medida do
+                            pH varia entre 0 e 14, valores inferiores à 6 indicam condições de acidez, valores
+                            próximos à 7 correspondem à neutralidade e superiores a 8, indicam
+                            alcalinidade.</p>
+                        <p style="text-align: justify;">As águas naturais de superfície apresentam pH variando de 6,0 a 8,5 – intervalo
+                            adequado para manutenção da vida aquática (LIBÂNIO, 2010). As restrições de
+                            faixas de pH são estabelecidas para as diferentes classes de águas naturais, os
+                            critérios de proteção à vida aquática fixam o pH entre 6,0 e 9,0 conforme
+                            Resolução nº 357 do CONAMA (BRASIL, 2005). Este parâmetro segundo Von
+                            Sperling (2005) é comumente utilizado na caracterização de corpos d’água e
+                            apresenta diversos tipos de origem: natural, através da dissolução de rochas,
+                            absorção de gases da atmosfera, oxidação da matéria orgânica e fotossíntese, ou
+                            oriundo de atividades antrópicas, como despejos domésticos e industriais.</p>
+                    </div>
+                    <div class="tab-pane fade" id="service-five">
+                        <h4></h4>
+                        <p style="text-align: justify;">As fontes de oxigênio dissolvido (OD) nos corpos d’água tem origem
+                            principalmente das trocas de gases atmosféricos e do processo de fotossíntese.
+                            Conforme Janzen et al. (2008), a quantidade de oxigênio dissolvido nos corpos
+                            d’água é um indicador primário da qualidade da água. Ou seja, quando a
+                            concentração de OD na água cai abaixo de valores aceitáveis, pode afetar
+                            negativamente a saúde do ecossistema aquático.</p>
+                        <p style="text-align: justify;"> A produção fotossintética e a
+                            re-aeração atmosférica contribuem para o aumento da concentração de oxigênio
+                            na água, enquanto que o consumo de oxigênio para a decomposição da matéria
+                            orgânica e a respiração realizada pelo ecossistema aquático colaboram para a
+                            diminuição da quantidade de oxigênio dissolvido na água. A concentração de
+                            OD nos cursos d’água dependem de diversos fatores como: temperatura, da
+                            pressão atmosférica, da salinidade, das atividades biológicas, de características
+                            hidráulicas (existência de corredeiras ou cachoeiras) e, também, de
+                            interferências antrópicas, como lançamento de efluentes nos cursos d’água.
+                            As medições da concentração de OD são em mg/L. A Resolução nº 357 do
+                            CONAMA (BRASIL, 2005) estipula que o valor mínimo de oxigênio dissolvido
+                            para a preservação da vida aquática, é de 5,0 mg/L.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row" id="noticias">
+            <div class="col-lg-12">
+                <h2 class="page-header">
+                    <small><img src="/static/img/logo_quali_desenho.PNG" style='width:40px; height:35px;' alt=""></small>
+                    Notícias</h2>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                    <script type="text/javascript" src="http://output48.rssinclude.com/output?type=js&amp;id=1201901&amp;hash=1aa22e7c128856ea354e4103b9d81fa3"></script>
+            </div>
+            <div class="col-md-5 col-sm-6">
+                    <script type="text/javascript" src="http://output21.rssinclude.com/output?type=js&amp;id=1201899&amp;hash=9af7defe7b255878bb2f0cf268727cb6"></script>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                    
+                            <form name="sentMessage" id="contactForm" novalidate class="form-containerContato">
+                                <h3>Contato</h3>
+                                <div class="control-group form-group">
+                                    <div class="controls">
+                                        <label>Nome:</label>
+                                        <input type="text" class="form-control" id="name" required data-validation-required-message="Campo obrigatório: Nome.">
+                                        <p class="help-block"></p>
+                                    </div>
+                                </div>
+                                <div class="control-group form-group">
+                                    <div class="controls">
+                                        <label>Email:</label>
+                                        <input type="email" class="form-control" id="email" required data-validation-required-message="Campo obrigatório: Email.">
+                                    </div>
+                                </div>
+                                <div class="control-group form-group">
+                                    <div class="controls">
+                                        <label>Mensagem:</label>
+                                        <textarea rows="5" cols="100" class="form-control" id="message" required
+                                            data-validation-required-message="Campo obrigatório: Mensagem." maxlength="999" style="resize:none"></textarea>
+                                    </div>
+                                </div>
+                                <div id="success"></div>
+                                <!-- For success/fail messages -->
+                                <button type="submit" class="btn btn-primary">Enviar</button>
+                            </form>
+            </div>
+        </div>
+        <hr>
+
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>QualiSinos - Sistema de acompanhamento integrado dos dados da Qualidade de água do Sinos</p><br>
+                </div>
+                <div class="col-md-3">
+                    <div class="media">
+                        <div class="pull-left">
+                            <img class="img-responsive" src="/static/img/logo-comite-sinos.jpg" style='width:70px; height:60px;'
+                                alt="">
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading"><a href="www.comitesinos.com.br">COMITESINOS</a></h4>
+                            <p>Comitê de Gerenciamento da Bacia Hidrográfica do Rio dos Sinos</p>
+                        </div>
+                    </div>
+                    <div class="media">
+                        <div class="pull-left">
+                            <img class="img-responsive" src="/static/img/fepam.jpg" style='width:70px; height:40px;'
+                                alt="">
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading"><a href="www.fepam.rs.gov.br">FEPAM</a></h4>
+                            <p>Fundação Estadual de Proteção Ambiental</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-3">
+                    <div class="media">
+                        <div class="pull-left">
+                            <img class="img-responsive" src="/static/img/Logo_SEMAE_SL-623x468.jpg" style='width:70px; height:60px;'
+                                alt="">
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading"><a href="www.semae.rs.gov.br">SEMAE</a></h4>
+                            <p>Serviço Municipal de Água e Esgotos de São Leopoldo</p>
+                        </div>
+                    </div>
+                    <div class="media">
+                        <div class="pull-left">
+                            <img class="img-responsive" src="/static/img/lg_comusa.png" style='width:70px; height:60px;'
+                                alt="">
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading"><a href="www.comusa.rs.gov.br">COMUSA</a></h4>
+                            <p>Serviços de Água e Esgotos de Novo Hamburgo</p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-3">
+                    <div class="media">
+                        <div class="pull-left">
+                            <img class="img-responsive" src="/static/img/Logo_CORSAN.svg.png" style='width:70px; height:60px;'
+                                alt="">
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading"><a href="www.corsan.com.br">CORSAN</a></h4>
+                            <p>Companhia Riograndense de Saneamento</p>
+                        </div>
+                    </div>
+                    <div class="media">
+                        <div class="pull-left">
+                            <img class="img-responsive" src="/static/img/ifc.jpg" style='width:70px; height:60px;' alt="">
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading"><a href=" https://ifrs.edu.br/">IFRS</a></h4>
+                            <p>Instituto Federal Rio Grande do Sul</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="media">
+                        <div class="pull-left">
+                            <img class="img-responsive" src="/static/img/logo_profAgua.png" style='width:100px; height:40px;'
+                                alt="">
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading"><a href="www.corsan.com.br">ProfÁgua</a></h4>
+                            <p>Mestrado Profissional em Rede Nacional em Gestão e Regulação de Recursos Hídricos<br><br></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <div class="component">
+            <!-- Start Nav Structure -->
+            <button class="cn-button" id="cn-button">+</button>
+            <div class="cn-wrapper" id="cn-wrapper">
+                <ul>
+                    <li><a href="#noticias"><i class="fa fa-newspaper-o"></i></a></li>
+                    <li><a href='#qualidade'><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></a></li>
+                    <li><a href="#"><span class="icon-home"></span></a></li>
+                    <li><a href="javascript:openFormContato();"><span class="fa fa-comments"></span></a></li>
+                    <li><a href="/login"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span></a></li>
+                </ul>
+            </div>
+            <div id="cn-overlay" class="cn-overlay"></div>
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Modal Header</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Some text in the modal.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- End Nav Structure -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Recipient:</label>
+                                    <input type="text" class="form-control" id="recipient-name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Message:</label>
+                                    <textarea class="form-control" id="message-text"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Send message</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="open-button" onclick="openForm()">
+            <div class="circle">
+                <img src="/static/img/Capturar3.PNG">
+            </div>
+        </button>
+    </div>
+    <!-- /.container -->
+    <!-- jQuery -->
+    <script src="/static/js/jquery.js"></script>
+    <script src="/static/js/jqBootstrapValidation.js"></script>
+    <script src="/static/js/contact_me.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/polyfills.js"></script>
+    <script src="/static/js/demo1.js"></script>
+    <script src="http://tympanus.net/codrops/adpacks/demoad.js"></script>
+    <script>
+        function openForm() {
+            document.getElementById("myForm").style.display = "block";
+        }
+
+        function closeForm() {
+            document.getElementById("myForm").style.display = "none";
+        }
+
+        function openFormContato() {
+            document.getElementById("myFormContato").style.display = "block";
+        }
+
+        function closeFormContato() {
+            document.getElementById("myFormContato").style.display = "none";
+        }
+    </script>
+
+</body>
+
+</html>

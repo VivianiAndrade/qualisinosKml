@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Meta, title, CSS, favicons, etc. -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>QualiSinos | Painel Administrativo </title>
+
+  <!-- Bootstrap -->
+  <link href="/static/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="/static/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <!-- NProgress -->
+  <link href="/static/vendors/nprogress/nprogress.css" rel="stylesheet">
+  <!-- bootstrap-progressbar -->
+  <link href="/static/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+  <!-- bootstrap-daterangepicker -->
+  <link href="/static/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+  <!-- Custom Theme Style -->
+  <link href="/static/build/css/custom.min.css" rel="stylesheet">
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+      function includeHTML() {
+        var z, i, elmnt, file, xhttp;
+        /* Loop through a collection of all HTML elements: */
+        z = document.getElementsByTagName("*");
+        for (i = 0; i < z.length; i++) {
+          elmnt = z[i];
+          /*search for elements with a certain atrribute:*/
+          file = elmnt.getAttribute("w3-include-html");
+          if (file) {
+            /* Make an HTTP request using the attribute value as the file name: */
+            xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+              if (this.readyState == 4) {
+                if (this.status == 200) {elmnt.innerHTML = this.responseText;}
+                if (this.status == 404) {elmnt.innerHTML = "Page not found.";}
+                /* Remove the attribute, and call this function once more: */
+                elmnt.removeAttribute("w3-include-html");
+                includeHTML();
+              }
+            } 
+            xhttp.open("GET", file, true);
+            xhttp.send();
+            /* Exit the function: */
+            return;
+          }
+        }
+      }
+</script>
+  <style>
+    .sidebar-footer a {
+      padding: 7px 0 3px;
+      text-align: center;
+      width: 100%;
+      font-size: 17px;
+      display: block;
+      float: left;
+      background: #172D44;
+      cursor: pointer;
+    }
+
+    .img_center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto
+    }
+  </style>
+</head>
+
+<body class="nav-md">
+  <div class="container body">
+    <div class="main_container">
+        <div w3-include-html="/static/scripts/menuLateral.html"></div> 
+        <script>
+                includeHTML();
+        </script>
+      <!-- top navigation -->
+      <div class="top_nav">
+        <div class="nav_menu">
+          <nav>
+            <div class="nav toggle">
+              <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="">
+                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                  <img src="/static/images/user.png" alt="">
+                  <span class=" fa fa-angle-down"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-usermenu pull-right">
+                  <li>
+                    <a href="javascript:;">
+                      <span class="badge bg-red pull-right">em breve</span>
+                      <span>Perfil</span>
+                    </a>
+                  </li>
+                  <li><a href="/logout"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                </ul>
+              </li>
+
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <!-- /top navigation -->
+
+      <!-- page content -->
+      <div class="right_col" role="main">
+        <div class="">
+          <div class="page-title">
+            <div class="title_left">
+              <h3>Parâmetros da qualidade da água <small>fonte: plataforma IoT</small></h3>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="x_panel">
+                <div class="x_title">
+                  <h2>Parâmetro: pH <small></small></h2>
+                  <div class="filter">
+                    <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                      <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                      <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
+                    </div>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <div class="col-md-4 col-sm-4 col-xs-12">
+                    <div>
+                      <div class="x_panel">
+                        <div class="x_content">
+                          <div id="echart_gauge" style="height:250px;"></div>
+                          <span><img src="/static/images/Escala_ph.jpg" style="height:100px;" class="img_center" /></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-8 col-sm-12 col-xs-12"><br><br>
+                    <div class="demo-container" style="height:280px">
+                      <div id="chart_plot_02" class="demo-placeholder"></div>
+                    </div>
+                    <div class="tiles">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="x_panel">
+                <div class="x_title">
+                  <h2>Parâmetro: Turbidez <small></small></h2>
+                  <div class="filter">
+                    <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                      <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                      <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
+                    </div>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                      <div id="chart_plot_03" class="demo-placeholder"></div>
+                   
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="x_panel">
+                <div class="x_title">
+                  <h2>Parâmetro: Temperatura <small></small></h2>
+                  <div class="filter">
+                    <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                      <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                      <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
+                    </div>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="demo-container" style="height:280px">
+                      <div id="chart_plot_23" class="demo-placeholder"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="x_panel">
+                <div class="x_title">
+                  <h2>Parâmetro: Oxigênio Dissolvido <small></small></h2>
+                  <div class="filter">
+                    <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                      <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                      <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
+                    </div>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">                
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div id="graph_bar_01" style="width:100%; height:280px;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="x_panel">
+                <div class="x_title">
+                  <h2>Parâmetro: Condutividade Elétrica <small></small></h2>
+                  <div class="filter">
+                    <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                      <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                      <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
+                    </div>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="demo-container" style="height:280px">
+                      <div id="chart_plot_22" class="demo-placeholder"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- /page content -->
+
+      <!-- footer content -->
+      <footer>
+        <div class="pull-right">
+          QualiSinos - Sistema de acompanhamento integrado dos dados da Qualidade de água do Sinos
+        </div>
+        <div class="clearfix"></div>
+      </footer>
+      <!-- /footer content -->
+    </div>
+  </div>
+
+  <script src="/static/scripts/menuLateral.js"></script>
+  <!-- jQuery -->
+  <script src="/static/vendors/jquery/dist/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="/static/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+  <!-- FastClick -->
+  <script src="/static/vendors/fastclick/lib/fastclick.js"></script>
+  <!-- NProgress -->
+  <script src="/static/vendors/nprogress/nprogress.js"></script>
+  <!-- Chart.js -->
+  <script src="/static/vendors/Chart.js/dist/Chart.min.js"></script>
+  <!-- jQuery Sparklines -->
+  <script src="/static/vendors/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+  <!-- Flot -->
+  <script src="/static/vendors/Flot/jquery.flot.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.pie.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.time.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.stack.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.resize.js"></script>
+  <!-- Flot plugins -->
+  <script src="/static/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+  <script src="/static/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+  <script src="/static/vendors/flot.curvedlines/curvedLines.js"></script>
+  <!-- DateJS -->
+  <script src="/static/vendors/DateJS/build/date.js"></script>
+  <!-- bootstrap-daterangepicker -->
+  <script src="/static/vendors/moment/min/moment.min.js"></script>
+  <script src="/static/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+  <!-- morris.js -->
+  <script src="/static/vendors/raphael/raphael.min.js"></script>
+  <script src="/static/vendors/morris.js/morris.min.js"></script>
+  <!-- ECharts -->
+  <script src="/static/vendors/echarts/dist/echarts.min.js"></script>
+  <script src="/static/vendors/echarts/map/js/world.js"></script>
+  <!-- easy-pie-chart -->
+  <script src="/static/vendors/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js"></script>
+  <!-- Custom Theme Scripts -->
+  <script src="/static/build/js/custom.min.js"></script>
+  <!-- gauge.js -->
+  <script src="/static/vendors/gauge.js/dist/gauge.min.js"></script>
+  <!-- bootstrap-progressbar -->
+  <script src="/static/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+  <!-- iCheck -->
+  <script src="/static/vendors/iCheck/icheck.min.js"></script>
+  <!-- Skycons -->
+  <script src="/static/vendors/skycons/skycons.js"></script>
+  <!-- Flot -->
+  <script src="/static/vendors/Flot/jquery.flot.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.pie.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.time.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.stack.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.resize.js"></script>
+  <!-- Flot plugins -->
+  <script src="/static/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+  <script src="/static/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+  <script src="/static/vendors/flot.curvedlines/curvedLines.js"></script>
+  <!-- DateJS -->
+  <script src="/static/vendors/DateJS/build/date.js"></script>
+  <!-- JQVMap -->
+  <script src="/static/vendors/jqvmap/dist/jquery.vmap.js"></script>
+  <script src="/static/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+  <script src="/static/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+  <!-- bootstrap-daterangepicker -->
+  <script src="/static/vendors/moment/min/moment.min.js"></script>
+  <script src="/static/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+  <script>
+    //echart Gauge
+
+    if ($('#echart_gauge').length) {
+
+      var echartGauge = echarts.init(document.getElementById('echart_gauge'));
+
+      echartGauge.setOption({
+        tooltip: {
+          formatter: "{a} <br/>{b} : {c}%"
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            restore: {
+              show: true,
+              title: "Restore"
+            },
+            saveAsImage: {
+              show: true,
+              title: "Save Image"
+            }
+          }
+        },
+        series: [{
+          name: 'Performance',
+          type: 'gauge',
+          center: ['50%', '50%'],
+          startAngle: 140,
+          endAngle: -140,
+          min: 0,
+          max: 100,
+          precision: 0,
+          splitNumber: 10,
+          axisLine: {
+            show: true,
+            lineStyle: {
+              color: [
+                [0.2, 'red'],
+                [0.4, 'yellow'],
+                [0.8, 'lightgreen'],
+                [1, '#ff4500']
+              ],
+              width: 30
+            }
+          },
+          axisTick: {
+            show: true,
+            splitNumber: 5,
+            length: 8,
+            lineStyle: {
+              color: '#eee',
+              width: 1,
+              type: 'solid'
+            }
+          },
+          axisLabel: {
+            show: true,
+            formatter: function (v) {
+              switch (v + '') {
+                case '10':
+                  return 'a';
+                case '30':
+                  return 'b';
+                case '60':
+                  return 'c';
+                case '90':
+                  return 'd';
+                default:
+                  return '';
+              }
+            },
+            textStyle: {
+              color: '#333'
+            }
+          },
+          splitLine: {
+            show: true,
+            length: 30,
+            lineStyle: {
+              color: '#eee',
+              width: 2,
+              type: 'solid'
+            }
+          },
+          pointer: {
+            length: '80%',
+            width: 8,
+            color: 'auto'
+          },
+          title: {
+            show: true,
+            offsetCenter: ['-65%', -10],
+            textStyle: {
+              color: '#333',
+              fontSize: 15
+            }
+          },
+          detail: {
+            show: true,
+            backgroundColor: 'rgba(0,0,0,0)',
+            borderWidth: 0,
+            borderColor: '#ccc',
+            width: 100,
+            height: 40,
+            offsetCenter: ['-60%', 10],
+            formatter: '{value}%',
+            textStyle: {
+              color: 'auto',
+              fontSize: 30
+            }
+          },
+          data: [{
+            value: 50,
+            name: 'Performance'
+          }]
+        }]
+      });
+
+    } 
+  </script>
+</body>
+
+</html>
