@@ -28,9 +28,10 @@ window.onload = () => {
 
 function templateTbody(idAnalise, idEstacao, nome, dataColeta, hora, parCond, parTurb, parTemp, parPh, parOD, parNivelRio) {
     var data = new Date(dataColeta);
+    console.log ('dataColeta', dataColeta);
     return `<tr>  
     <td>${nome}</td> 
-    <td>${data}</td>
+    <td>${dataColeta}</td>
     <td>${hora}</td>
     <td>${parCond}</td>
     <td>${parTurb}</td>
