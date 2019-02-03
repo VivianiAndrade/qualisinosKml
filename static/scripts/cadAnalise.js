@@ -30,7 +30,7 @@ function templateTbody(idAnalise, idEstacao, nome, dataColeta, hora, parCond, pa
     var data = new Date(dataColeta);
     return `<tr>  
     <td>${nome}</td> 
-    <td>${data.toLocaleDateString()}</td>
+    <td>${data}</td>
     <td>${hora}</td>
     <td>${parCond}</td>
     <td>${parTurb}</td>
